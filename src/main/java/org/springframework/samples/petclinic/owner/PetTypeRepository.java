@@ -13,24 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.springframework.samples.petclinic.owner;
 
-package org.springframework.samples.petclinic;
+import org.springframework.data.tarantool.repository.TarantoolRepository;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.samples.petclinic.vet.VetRepository;
+import java.util.UUID;
 
-@SpringBootTest
-class PetclinicIntegrationTests {
+/**
+ * Repository class for <code>Pet</code> domain objects All method names are compliant
+ * with Spring Data naming conventions so this interface can easily be extended for Spring
+ * Data. See:
+ * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.query-methods.query-creation
+ *
+ */
+public interface PetTypeRepository extends TarantoolRepository<PetType, UUID> {
 
-	@Autowired
-	private VetRepository vets;
-
-	@Test
-	void testFindAll() throws Exception {
-		vets.findAll();
-		vets.findAll(); // served from cache
-	}
 
 }

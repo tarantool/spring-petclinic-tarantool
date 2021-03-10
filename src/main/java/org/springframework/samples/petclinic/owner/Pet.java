@@ -16,23 +16,12 @@
 package org.springframework.samples.petclinic.owner;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import java.util.*;
 
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
+import org.springframework.data.tarantool.core.mapping.Field;
+import org.springframework.data.tarantool.core.mapping.Tuple;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.model.NamedEntity;
 import org.springframework.samples.petclinic.visit.Visit;
@@ -44,23 +33,25 @@ import org.springframework.samples.petclinic.visit.Visit;
  * @author Juergen Hoeller
  * @author Sam Brannen
  */
-@Entity
-@Table(name = "pets")
+@Tuple("pets")
 public class Pet extends NamedEntity {
 
-	@Column(name = "birth_date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Field(name = "birth_date")
 	private LocalDate birthDate;
 
-	@ManyToOne
-	@JoinColumn(name = "type_id")
+	/*
+	 * Implicit join happens on tarantool router
+	 * and is then passed using the PetRepo.
+	 * Space only store type_id, not a full tuple of PetType.
+	 * When we return data we replace it.
+	 */
+	@Field(name = "type_id")
 	private PetType type;
 
-	@ManyToOne
-	@JoinColumn(name = "owner_id")
-	private Owner owner;
+	@Field(name = "owner_id")
+	private UUID owner;
 
-	@Transient
 	private Set<Visit> visits = new LinkedHashSet<>();
 
 	public void setBirthDate(LocalDate birthDate) {
@@ -79,11 +70,11 @@ public class Pet extends NamedEntity {
 		this.type = type;
 	}
 
-	public Owner getOwner() {
+	public UUID getOwner() {
 		return this.owner;
 	}
 
-	protected void setOwner(Owner owner) {
+	protected void setOwner(UUID owner) {
 		this.owner = owner;
 	}
 

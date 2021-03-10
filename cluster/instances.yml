@@ -1,0 +1,24 @@
+---
+testserver.router:
+  advertise_uri: localhost:3301
+  http_port: 8081
+
+testserver.s1-master:
+  advertise_uri: localhost:3302
+  http_port: 8082
+
+testserver.s1-replica:
+  advertise_uri: localhost:3303
+  http_port: 8083
+
+testserver.s2-master:
+  advertise_uri: localhost:3304
+  http_port: 8084
+
+testserver.s2-replica:
+  advertise_uri: localhost:3305
+  http_port: 8085
+
+testserver-stateboard:
+  listen: localhost:3310
+  password: passwd

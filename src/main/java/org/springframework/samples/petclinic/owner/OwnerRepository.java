@@ -16,10 +16,10 @@
 package org.springframework.samples.petclinic.owner;
 
 import java.util.Collection;
+import java.util.UUID;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.tarantool.repository.Query;
+import org.springframework.data.tarantool.repository.TarantoolRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Sam Brannen
  * @author Michael Isvy
  */
-public interface OwnerRepository extends Repository<Owner, Integer> {
+public interface OwnerRepository extends TarantoolRepository<Owner, UUID> {
 
 	/**
 	 * Retrieve {@link Owner}s from the data store by last name, returning all owners
@@ -42,23 +42,22 @@ public interface OwnerRepository extends Repository<Owner, Integer> {
 	 * @return a Collection of matching {@link Owner}s (or an empty Collection if none
 	 * found)
 	 */
-	@Query("SELECT DISTINCT owner FROM Owner owner left join fetch owner.pets WHERE owner.lastName LIKE :lastName%")
-	@Transactional(readOnly = true)
-	Collection<Owner> findByLastName(@Param("lastName") String lastName);
+	@Query(function = "find_owners_by_last_name")
+	Collection<Owner> findByLastName(String lastName);
 
 	/**
 	 * Retrieve an {@link Owner} from the data store by id.
 	 * @param id the id to search for
 	 * @return the {@link Owner} if found
 	 */
-	@Query("SELECT owner FROM Owner owner left join fetch owner.pets WHERE owner.id =:id")
-	@Transactional(readOnly = true)
-	Owner findById(@Param("id") Integer id);
+	@Query(function = "find_owner_by_id")
+	Owner findOwnerById(UUID id);
 
 	/**
 	 * Save an {@link Owner} to the data store, either inserting or updating it.
 	 * @param owner the {@link Owner} to save
+	 * @return {@link Owner}
 	 */
-	void save(Owner owner);
+	Owner save(Owner owner);
 
 }

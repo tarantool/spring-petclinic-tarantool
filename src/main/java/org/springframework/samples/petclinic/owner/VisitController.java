@@ -16,6 +16,7 @@
 package org.springframework.samples.petclinic.owner;
 
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -44,9 +45,12 @@ class VisitController {
 
 	private final PetRepository pets;
 
-	public VisitController(VisitRepository visits, PetRepository pets) {
+	private final OwnerRepository owners;
+
+	public VisitController(VisitRepository visits, PetRepository pets, OwnerRepository owners) {
 		this.visits = visits;
 		this.pets = pets;
+		this.owners = owners;
 	}
 
 	@InitBinder
@@ -62,18 +66,22 @@ class VisitController {
 	 * @return Pet
 	 */
 	@ModelAttribute("visit")
-	public Visit loadPetWithVisit(@PathVariable("petId") int petId, Map<String, Object> model) {
-		Pet pet = this.pets.findById(petId);
+	public Visit loadPetWithVisit(@PathVariable("petId") UUID petId, @PathVariable("ownerId") UUID ownerId, Map<String, Object>
+		model) {
+		Pet pet = this.pets.findPetById(petId);
 		pet.setVisitsInternal(this.visits.findByPetId(petId));
 		model.put("pet", pet);
 		Visit visit = new Visit();
 		pet.addVisit(visit);
+
+		Owner owner = this.owners.findOwnerById(ownerId);
+		model.put("owner", owner);
 		return visit;
 	}
 
 	// Spring MVC calls method loadPetWithVisit(...) before initNewVisitForm is called
-	@GetMapping("/owners/*/pets/{petId}/visits/new")
-	public String initNewVisitForm(@PathVariable("petId") int petId, Map<String, Object> model) {
+	@GetMapping("/owners/{ownerId}/pets/{petId}/visits/new")
+	public String initNewVisitForm(@PathVariable("petId") UUID petId, Map<String, Object> model) {
 		return "pets/createOrUpdateVisitForm";
 	}
 
@@ -84,6 +92,7 @@ class VisitController {
 			return "pets/createOrUpdateVisitForm";
 		}
 		else {
+			visit.setId(UUID.randomUUID());
 			this.visits.save(visit);
 			return "redirect:/owners/{ownerId}";
 		}
