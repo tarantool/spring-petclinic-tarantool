@@ -15,7 +15,6 @@
  */
 package org.springframework.samples.petclinic.owner;
 
-
 import org.springframework.data.tarantool.repository.Query;
 import org.springframework.data.tarantool.repository.TarantoolRepository;
 

@@ -56,10 +56,9 @@ public class Owner extends Person {
 	private String telephone;
 
 	/*
-	* Implicit join happens on tarantool router
-	* and is then passed using the OwnerRepository.
-	* Space owners does not store pets data,
-	* pets are joined using the owner_id they know.
+	 * Implicit join happens on tarantool router and is then passed using the
+	 * OwnerRepository. Space owners does not store pets data, pets are joined using the
+	 * owner_id they know.
 	 */
 	@Field(name = "pets")
 	private Set<Pet> pets;

@@ -41,10 +41,9 @@ public class Pet extends NamedEntity {
 	private LocalDate birthDate;
 
 	/*
-	 * Implicit join happens on tarantool router
-	 * and is then passed using the PetRepo.
-	 * Space only store type_id, not a full tuple of PetType.
-	 * When we return data we replace it.
+	 * Implicit join happens on tarantool router and is then passed using the PetRepo.
+	 * Space only store type_id, not a full tuple of PetType. When we return data we
+	 * replace it.
 	 */
 	@Field(name = "type_id")
 	private PetType type;

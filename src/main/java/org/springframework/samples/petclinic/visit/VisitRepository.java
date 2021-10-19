@@ -41,9 +41,10 @@ public interface VisitRepository extends TarantoolRepository<Visit, UUID> {
 	 * @param visit the <code>Visit</code> to save
 	 * @see BaseEntity#isNew
 	 */
-	Visit save(Visit visit)  throws DataAccessException;
+	Visit save(Visit visit) throws DataAccessException;
 
 	// we can't use default findByPetId without annotation yet
 	@Query(function = "find_visits_by_pet_id")
 	List<Visit> findByPetId(UUID petId);
+
 }

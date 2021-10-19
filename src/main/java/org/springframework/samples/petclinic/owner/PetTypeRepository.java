@@ -28,5 +28,4 @@ import java.util.UUID;
  */
 public interface PetTypeRepository extends TarantoolRepository<PetType, UUID> {
 
-
 }
