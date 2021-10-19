@@ -66,8 +66,8 @@ class VisitController {
 	 * @return Pet
 	 */
 	@ModelAttribute("visit")
-	public Visit loadPetWithVisit(@PathVariable("petId") UUID petId, @PathVariable("ownerId") UUID ownerId, Map<String, Object>
-		model) {
+	public Visit loadPetWithVisit(@PathVariable("petId") UUID petId, @PathVariable("ownerId") UUID ownerId,
+			Map<String, Object> model) {
 		Pet pet = this.pets.findPetById(petId);
 		pet.setVisitsInternal(this.visits.findByPetId(petId));
 		model.put("pet", pet);

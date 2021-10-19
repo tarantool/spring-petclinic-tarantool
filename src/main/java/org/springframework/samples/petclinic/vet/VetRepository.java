@@ -37,8 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Michael Isvy
  */
 
-public interface VetRepository
-		extends TarantoolRepository<Vet, UUID> {
+public interface VetRepository extends TarantoolRepository<Vet, UUID> {
 
 	/**
 	 * Retrieve all <code>Vet</code>s from the data store.

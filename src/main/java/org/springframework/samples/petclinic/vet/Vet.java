@@ -36,10 +36,9 @@ import org.springframework.samples.petclinic.model.Person;
 public class Vet extends Person {
 
 	/*
-	 * Implicit join happens on tarantool router
-	 * and is then passed using the VetRepository.
-	 * Space vets does not store specialties data,
-	 * specialties are joined via vet_specialties space.
+	 * Implicit join happens on tarantool router and is then passed using the
+	 * VetRepository. Space vets does not store specialties data, specialties are joined
+	 * via vet_specialties space.
 	 */
 	@Field(name = "specialties")
 	private Set<Specialty> specialties;

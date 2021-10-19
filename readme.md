@@ -8,7 +8,7 @@ First you need to [install](https://www.tarantool.io/en/download/os-installation
 ```
 git clone git@github.com:ArtDu/spring-petclinic-tarantool.git
 cd spring-petclinic-tarantool/cluster
-tarantoolctl rocks make                                                                 # Install modules
+cartridge build                                                                         # Install modules
 cartridge start -d                                                                      # Start cluster in deamonize mode
 cartridge replicasets setup --bootstrap-vshard                                          # Setup replica sets described in a file replicasets.yml
 curl -X POST http://localhost:8081/migrations/up                                        # Run cluster-wide migrations for your data
@@ -33,10 +33,25 @@ Or you can run it from Maven directly using the Spring Boot Maven plugin. If you
 ./mvnw spring-boot:run
 ```
 
+**Version restrictions**  
+For this example, version restrictions were found:
+
+| rock                   |       version |
+|------------------------|---------------|
+| crud                   | <=0.5.0       |
+
+Also, the `cartridge replicasets setup` command works only when `cartridge-cli >= 2.5.0`.   
+In the future, the example will be improved to work without limiting versions.
+
 ## About tarantool cluster
 
 
-Tarantool is Reliable NoSQL DBMS. This example is run using the [cartridge framework](https://www.tarantool.io/en/cartridge/), which is a handy tarantools orchestrator. Data sharding is performed on the principle of virtual buckets using the [vshard module](https://github.com/tarantool/vshard). Therefore, to begin with, we must install all the necessary modules, they are described in the `testserver-scm-1.rockspec` file using the command `tarantoolctl rocks install`
+Tarantool is Reliable NoSQL DBMS.
+This example is run using the [cartridge framework](https://www.tarantool.io/en/cartridge/),
+which is a handy tarantools orchestrator. 
+Data sharding is performed on the principle of virtual buckets using the [vshard module](https://github.com/tarantool/vshard).
+Therefore, to begin with, we must install all the necessary modules, they are described in the `testserver-scm-1.rockspec`
+file using the command `tarantoolctl rocks make`
 
 ---
 All the code with the cluster logic is in the cluster folder. Using the `cartridge start -d` command, the cartridge framework starts several tarantool instances, the configuration of which is described in the instances.yml file:
