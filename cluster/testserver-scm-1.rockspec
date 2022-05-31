@@ -9,10 +9,10 @@ dependencies = {
     'lua >= 5.1',
     'checks == 3.1.0-1',
     'cartridge == 2.7.4-1',
-    'metrics == 0.9.0-1',
+    'metrics == 0.13.0-1',
     'cartridge-cli-extensions == 1.1.1-1',
-    'crud == 0.9.0-1',
-    'migrations = 0.4.2-1'
+    'crud == 0.11.2-1',
+    'migrations == 0.4.2-1',
 }
 build = {
 	type = 'none';
