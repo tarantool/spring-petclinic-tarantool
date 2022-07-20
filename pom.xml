@@ -25,12 +25,11 @@
     <webjars-bootstrap.version>5.1.3</webjars-bootstrap.version>
     <webjars-jquery-ui.version>1.13.1</webjars-jquery-ui.version>
     <webjars-jquery.version>3.6.0</webjars-jquery.version>
-    <wro4j.version>1.10.1</wro4j.version>
+    <wro4j.version>1.8.0</wro4j.version>
 
     <jacoco.version>0.8.8</jacoco.version>
     <nohttp-checkstyle.version>0.0.10</nohttp-checkstyle.version>
-    <spring-format.version>0.0.34</spring-format.version>
-    <spring-boot-maven-plugin.version>2.7.1</spring-boot-maven-plugin.version>
+    <spring-format.version>0.0.25</spring-format.version>
 
     <mockito.version>4.6.1</mockito.version>
   </properties>
@@ -149,7 +148,7 @@
           <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>10.3.1</version>
+            <version>8.45.1</version>
           </dependency>
           <dependency>
             <groupId>io.spring.nohttp</groupId>
@@ -178,7 +177,6 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>${spring-boot-maven-plugin.version}</version>
         <executions>
           <execution>
             <!-- Spring Boot Actuator displays build-related information
@@ -222,7 +220,6 @@
       <plugin>
         <groupId>pl.project13.maven</groupId>
         <artifactId>git-commit-id-plugin</artifactId>
-        <version>4.9.10</version>
         <executions>
           <execution>
             <goals>
@@ -361,7 +358,7 @@
                       <pluginExecutionFilter>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
-                        <version>${spring-boot-maven-plugin.version}</version>
+                        <versionRange>[1,)</versionRange>
                         <goals>
                           <goal>build-info</goal>
                         </goals>
