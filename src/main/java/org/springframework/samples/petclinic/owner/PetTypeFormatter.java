@@ -38,9 +38,12 @@ public class PetTypeFormatter implements Formatter<PetType> {
 
 	private final PetRepository pets;
 
+	private final PetTypeRepository petsTypes;
+
 	@Autowired
-	public PetTypeFormatter(PetRepository pets) {
+	public PetTypeFormatter(PetRepository pets, PetTypeRepository petsTypes) {
 		this.pets = pets;
+		this.petsTypes = petsTypes;
 	}
 
 	@Override
@@ -50,7 +53,7 @@ public class PetTypeFormatter implements Formatter<PetType> {
 
 	@Override
 	public PetType parse(String text, Locale locale) throws ParseException {
-		Collection<PetType> findPetTypes = this.pets.findPetTypes();
+		Collection<PetType> findPetTypes = (Collection<PetType>) this.petsTypes.findAll();
 		for (PetType type : findPetTypes) {
 			if (type.getName().equals(text)) {
 				return type;

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.UUID;
 
 /**
  * @author Juergen Hoeller
@@ -38,21 +39,24 @@ class PetController {
 
 	private final PetRepository pets;
 
+	private final PetTypeRepository petTypes;
+
 	private final OwnerRepository owners;
 
-	public PetController(PetRepository pets, OwnerRepository owners) {
+	public PetController(PetRepository pets, OwnerRepository owners, PetTypeRepository petTypes) {
 		this.pets = pets;
+		this.petTypes = petTypes;
 		this.owners = owners;
 	}
 
 	@ModelAttribute("types")
 	public Collection<PetType> populatePetTypes() {
-		return this.pets.findPetTypes();
+		return (Collection<PetType>) this.petTypes.findAll();
 	}
 
 	@ModelAttribute("owner")
-	public Owner findOwner(@PathVariable("ownerId") int ownerId) {
-		return this.owners.findById(ownerId);
+	public Owner findOwner(@PathVariable("ownerId") UUID ownerId) {
+		return this.owners.findOwnerById(ownerId);
 	}
 
 	@InitBinder("owner")
@@ -90,8 +94,8 @@ class PetController {
 	}
 
 	@GetMapping("/pets/{petId}/edit")
-	public String initUpdateForm(@PathVariable("petId") int petId, ModelMap model) {
-		Pet pet = this.pets.findById(petId);
+	public String initUpdateForm(@PathVariable("petId") UUID petId, ModelMap model) {
+		Pet pet = this.pets.findPetById(petId);
 		model.put("pet", pet);
 		return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 	}
@@ -99,7 +103,7 @@ class PetController {
 	@PostMapping("/pets/{petId}/edit")
 	public String processUpdateForm(@Valid Pet pet, BindingResult result, Owner owner, ModelMap model) {
 		if (result.hasErrors()) {
-			pet.setOwner(owner);
+			pet.setOwner(owner.getId());
 			model.put("pet", pet);
 			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 		}

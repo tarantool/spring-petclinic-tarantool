@@ -16,10 +16,13 @@
 package org.springframework.samples.petclinic.vet;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.tarantool.repository.Query;
+import org.springframework.data.tarantool.repository.TarantoolRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -33,14 +36,15 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Sam Brannen
  * @author Michael Isvy
  */
-public interface VetRepository extends Repository<Vet, Integer> {
+
+public interface VetRepository extends TarantoolRepository<Vet, UUID> {
 
 	/**
 	 * Retrieve all <code>Vet</code>s from the data store.
 	 * @return a <code>Collection</code> of <code>Vet</code>s
 	 */
-	@Transactional(readOnly = true)
 	@Cacheable("vets")
-	Collection<Vet> findAll() throws DataAccessException;
+	@Query(function = "get_vets_with_specialties")
+	Collection<Vet> getVetsWithSpecialties() throws DataAccessException;
 
 }
