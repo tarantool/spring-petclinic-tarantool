@@ -19,7 +19,7 @@ return {
                                         unique = false,
                                         if_not_exists = true })
 
-        utils.register_sharding_key('visits', {'bucket_id'})
+        utils.register_sharding_key('visits', {'id'})
         return true
     end
 }

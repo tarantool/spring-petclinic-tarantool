@@ -22,7 +22,7 @@ return {
                                            unique = false,
                                            if_not_exists = true })
 
-        utils.register_sharding_key('owners', {'bucket_id'})
+        utils.register_sharding_key('owners', {'id'})
         return true
     end
 }

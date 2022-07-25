@@ -62,7 +62,7 @@ class VisitController {
 	 * Called before each and every @RequestMapping annotated method. 2 goals: - Make sure
 	 * we always have fresh data - Since we do not use the session scope, make sure that
 	 * Pet object always has an id (Even though id is not part of the form fields)
-	 * @param petId
+	 * @param {UUID} petId primary key of pets space
 	 * @return Pet
 	 */
 	@ModelAttribute("visit")
