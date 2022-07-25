@@ -14,7 +14,7 @@ return {
                                                 unique = false,
                                                 if_not_exists = true })
 
-        utils.register_sharding_key('specialties', {'bucket_id'})
+        utils.register_sharding_key('specialties', {'id'})
         return true
     end
 }

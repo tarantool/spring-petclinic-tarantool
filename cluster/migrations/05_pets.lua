@@ -20,7 +20,7 @@ return {
                                         unique = false,
                                         if_not_exists = true})
 
-        utils.register_sharding_key('pets', {'bucket_id'})
+        utils.register_sharding_key('pets', {'id'})
         return true
     end
 }

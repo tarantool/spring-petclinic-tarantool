@@ -4,7 +4,7 @@
 <a href="https://speakerdeck.com/michaelisvy/spring-petclinic-sample-application">See the presentation here</a>
 
 ## Running petclinic locally
-First you need to [install](https://www.tarantool.io/en/download/os-installation/ubuntu/) tarantool on the system. Well, then you need to start the tarantool cluster:
+First you need to [install](https://www.tarantool.io/en/download/os-installation/) tarantool on the system. Well, then you need to start the tarantool cluster:
 ```
 git clone git@github.com:ArtDu/spring-petclinic-tarantool.git
 cd spring-petclinic-tarantool/cluster
@@ -35,12 +35,7 @@ Or you can run it from Maven directly using the Spring Boot Maven plugin. If you
 
 **Version restrictions**  
 For this example, version restrictions were found:
-
-| rock                   |       version |
-|------------------------|---------------|
-| crud                   | <=0.5.0       |
-
-Also, the `cartridge replicasets setup` command works only when `cartridge-cli >= 2.5.0`.   
+The `cartridge replicasets setup` command works only when `cartridge-cli >= 2.5.0`.   
 In the future, the example will be improved to work without limiting versions.
 
 ## About tarantool cluster
@@ -48,7 +43,7 @@ In the future, the example will be improved to work without limiting versions.
 
 Tarantool is Reliable NoSQL DBMS.
 This example is run using the [cartridge framework](https://www.tarantool.io/en/cartridge/),
-which is a handy tarantools orchestrator. 
+which is a powerful orchestrator for Tarantool.
 Data sharding is performed on the principle of virtual buckets using the [vshard module](https://github.com/tarantool/vshard).
 Therefore, to begin with, we must install all the necessary modules, they are described in the `testserver-scm-1.rockspec`
 file using the command `tarantoolctl rocks make`
@@ -91,31 +86,31 @@ The cluster configuration is located in the replicasets.yml file:
 ```yaml
 r1:
   instances:
-  - router
+    - router
   roles:
-  - vshard-router
-  - crud-router
-  - app.roles.api_router
+    - vshard-router
+    - crud-router
+    - app.roles.api_router
   all_rw: false
 s1:
   instances:
-  - s1-master
-  - s1-replica
+    - s1-master
+    - s1-replica
   roles:
-  - vshard-storage
-  - crud-storage
-  - app.roles.api_storage
+    - vshard-storage
+    - crud-storage
+    - app.roles.api_storage
   weight: 1
   all_rw: false
   vshard_group: default
 s2:
   instances:
-  - s2-master
-  - s2-replica
+    - s2-master
+    - s2-replica
   roles:
-  - vshard-storage
-  - crud-storage
-  - app.roles.api_storage
+    - vshard-storage
+    - crud-storage
+    - app.roles.api_storage
   weight: 1
   all_rw: false
   vshard_group: default
@@ -130,7 +125,7 @@ s2:
 Next, using the [migration module ](https://github.com/tarantool/migrations) can run cluster-wide migrations for your data
 `curl -X POST http://localhost:8081/migrations/up`
 
-and fill in the data using a tarantool router connection: 
+and fill in the data using a tarantool router connection:
 `echo "require('data')" | tarantoolctl connect admin:secret-cluster-cookie@0.0.0.0:3301`
 ``
 
@@ -144,15 +139,15 @@ Let's look at the data model:
 Here we can immediately see that there are no familiar relationships using foreign keys, and the datatype of the primary keys is uuid.
 To keep data normalization, data splitting and joining are being did in a special way:
 
-1. We use **uuid** as it is much faster than using any auto-increment on the storage cluster. 
-UUID can be generated both on the client and on the side of tarantool application scripts.
+1. We use **uuid** as it is much faster than using any auto-increment on the storage cluster.
+   UUID can be generated both on the client and on the side of tarantool application scripts.
 2. **Join** happens predominantly on storages, if possible, and is aggregated using map reduce.
 3. Fields where the data type is indicated with a question mark means that this field can be **nullable**, this is done so that we can return data nested using custom joins.
 4. Since there are no foreign keys, **secondary indexes** were added to quickly fetch data. In the diagram, they are indicated by a graph tree.
 
 
 ### Data nesting and joining
-You can nest data from one space into another. To do this, you need to place an empty field in space_object: format. When transferring data from the database to the client, add data to this stub. 
+You can nest data from one space into another. To do this, you need to place an empty field in space_object: format. When transferring data from the database to the client, add data to this stub.
 E.g.:
 ```lua
 owners:format({
@@ -230,8 +225,7 @@ end
 
 ## Work from java client
 
-Working with tarantool is done using the tarantool function binding via Query annotation, which is indicated above, or use the standard CrudRepository functions (findById, save and etc). 
-
+Interaction with Tarantool can be done by using Tarantool function binding via Query annotation indicated above or by using a standard CrudRepository functions (like findById, save, etc...).
 
 ```java
 // Binding tarantool function
@@ -256,13 +250,14 @@ public class Visit extends BaseEntity {
     @Field(name = "description")
     private String description;
 ...
+}
 ```
 
 Data is obtained from cluster via custom functions lua functions or '[crud](https://github.com/tarantool/crud)' library that execute on 'router' instance. Here is an example of configuration to establish connection to tarantool router instance:
 ```java
 @Configuration
 @EnableTarantoolRepositories(basePackageClasses = { VetRepository.class, OwnerRepository.class, PetRepository.class,
-		PetTypeRepository.class, VisitRepository.class })
+        PetTypeRepository.class, VisitRepository.class })
 public class TarantoolConfiguration extends AbstractTarantoolDataConfiguration {
 
     // localhost

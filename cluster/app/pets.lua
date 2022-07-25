@@ -1,11 +1,24 @@
 local crud = require('crud')
 local uuid = require('uuid')
 
--- OneToOne  = Pet -> PetType
+local PET_TYPE_FIELD_NUMBER = 4
+
+--- OneToOne = Pet -> PetType
 local function find_pet_by_id(id)
-    local pet = crud.select("pets", {{"=", 'id', id}})
-    local type = crud.get("types", pet.rows[1][4])
-    pet.rows[1][4] = crud.unflatten_rows(type.rows, type.metadata)[1]
+    local pet, pet_type, err
+    pet, err = crud.select("pets", { { "=", 'id', id } }, { batch_size = 1000, prefer_replica = true })
+    if err ~= nil then
+        return nil, err
+    end
+
+    pet_type, err = crud.get("types", pet.rows[1][PET_TYPE_FIELD_NUMBER])
+    if err ~= nil then
+        return nil, err
+    end
+
+    pet_type = crud.unflatten_rows(pet_type.rows, pet_type.metadata)[1]
+    pet.rows[1] = pet.rows[1]:transform(PET_TYPE_FIELD_NUMBER, 1, pet_type)
+
     return pet
 end
 
@@ -15,9 +28,8 @@ local function save_pet(pet)
     if pet.id == nil then
         pet.id = uuid()
     end
-    crud.replace_object("pets",
-        pet
-    )
+
+    crud.replace_object("pets", pet)
 end
 
 return {

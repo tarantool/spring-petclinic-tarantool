@@ -1,11 +1,14 @@
 package org.springframework.samples.petclinic.tarantool;
 
-import io.tarantool.driver.*;
 import io.tarantool.driver.api.TarantoolClient;
 import io.tarantool.driver.api.TarantoolResult;
+import io.tarantool.driver.api.TarantoolClientConfig;
+import io.tarantool.driver.api.TarantoolServerAddress;
+import io.tarantool.driver.api.TarantoolClusterAddressProvider;
 import io.tarantool.driver.api.tuple.TarantoolTuple;
 import io.tarantool.driver.auth.SimpleTarantoolCredentials;
 import io.tarantool.driver.auth.TarantoolCredentials;
+import io.tarantool.driver.core.ProxyTarantoolTupleClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.tarantool.config.AbstractTarantoolDataConfiguration;
