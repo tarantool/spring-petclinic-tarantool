@@ -5,12 +5,15 @@ local ID_FIELD_NUMBER = 1
 
 --- OneToMany pattern, the owner can have multiple pets
 local function find_owners_by_last_name(last_name)
-    local owners, pets, err
+    local owners, owner, pets, err
 
     -- return all if the last_name is not specified
     if last_name == nil or last_name == "" then
         owners, err = crud.select("owners", { batch_size = 1000, prefer_replica = true })
     else
+        --- Pagination is implemented inside crud, if we set batch_size = 1000,
+        --- then crud will take 1000 elements per request to Tarantool.
+        --- After selecting all elements, it will return result.
         owners, err = crud.select("owners", { { '=', 'last_name', last_name } },
             { batch_size = 1000, prefer_replica = true })
     end
@@ -18,7 +21,8 @@ local function find_owners_by_last_name(last_name)
         return nil, err
     end
 
-    for _, owner in pairs(owners.rows) do
+    for i = 1, #owners.rows do
+        owner = owners.rows[i]
         pets, err = crud.select("pets", { { '=', 'owner_id', owner[ID_FIELD_NUMBER] } },
             { batch_size = 1000, prefer_replica = true })
         if err ~= nil then
@@ -31,7 +35,7 @@ local function find_owners_by_last_name(last_name)
             -- for this Query we don't need pet_type name
             pet.type_id = { id=pet.type_id }
         end
-        owner = owner:transform(PET_FIELD_NUMBER, 1, pets)
+        owners.rows[i] = owner:transform(PET_FIELD_NUMBER, 1, pets)
     end
 
     return owners
@@ -42,7 +46,7 @@ end
 local function find_owner_by_id(id)
     local owner, pets, pet_type, err
 
-    owner, err= crud.select("owners", { { '=', 'id', id } }, { batch_size = 1000, prefer_replica = true })
+    owner, err = crud.select("owners", { { '=', 'id', id } }, { first = 1 })
     if err ~= nil then
         return nil, err
     end
