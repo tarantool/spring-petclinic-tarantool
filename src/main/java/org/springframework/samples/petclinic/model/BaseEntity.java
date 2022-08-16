@@ -15,12 +15,11 @@
  */
 package org.springframework.samples.petclinic.model;
 
-import java.io.Serializable;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.tarantool.core.mapping.Field;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Simple JavaBean domain object with an id property. Used as a base class for objects
@@ -29,19 +28,28 @@ import javax.persistence.MappedSuperclass;
  * @author Ken Krebs
  * @author Juergen Hoeller
  */
-@MappedSuperclass
 public class BaseEntity implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private UUID id;
 
-	public Integer getId() {
+	public UUID getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(UUID id) {
 		this.id = id;
+	}
+
+	@Field(name = "bucket_id")
+	private Integer bucketId;
+
+	public Integer getBucketId() {
+		return bucketId;
+	}
+
+	public void setBucketId(Integer bucketId) {
+		this.bucketId = bucketId;
 	}
 
 	public boolean isNew() {

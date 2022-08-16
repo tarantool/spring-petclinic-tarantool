@@ -15,11 +15,10 @@
  */
 package org.springframework.samples.petclinic.owner;
 
-import java.util.List;
+import org.springframework.data.tarantool.repository.Query;
+import org.springframework.data.tarantool.repository.TarantoolRepository;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.UUID;
 
 /**
  * Repository class for <code>Pet</code> domain objects All method names are compliant
@@ -32,28 +31,22 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Sam Brannen
  * @author Michael Isvy
  */
-public interface PetRepository extends Repository<Pet, Integer> {
+public interface PetRepository extends TarantoolRepository<Pet, UUID> {
 
 	/**
-	 * Retrieve all {@link PetType}s from the data store.
-	 * @return a Collection of {@link PetType}s.
-	 */
-	@Query("SELECT ptype FROM PetType ptype ORDER BY ptype.name")
-	@Transactional(readOnly = true)
-	List<PetType> findPetTypes();
-
-	/**
-	 * Retrieve a {@link Pet} from the data store by id.
+	 * Retrieve a {@link Pet} from the data store by id and owner id. We need ownerId
+	 * because we should know which bucket our pet is in.
 	 * @param id the id to search for
 	 * @return the {@link Pet} if found
 	 */
-	@Transactional(readOnly = true)
-	Pet findById(Integer id);
+	@Query(function = "find_pet_by_id")
+	Pet findPetById(UUID id);
 
 	/**
 	 * Save a {@link Pet} to the data store, either inserting or updating it.
 	 * @param pet the {@link Pet} to save
 	 */
-	void save(Pet pet);
+	@Query(function = "save_pet")
+	Pet save(Pet pet);
 
 }

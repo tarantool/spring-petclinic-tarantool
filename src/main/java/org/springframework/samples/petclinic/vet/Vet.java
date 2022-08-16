@@ -15,22 +15,13 @@
  */
 package org.springframework.samples.petclinic.vet;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlElement;
-
+import com.sun.xml.txw2.annotation.XmlElement;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
+import org.springframework.data.tarantool.core.mapping.Field;
+import org.springframework.data.tarantool.core.mapping.Tuple;
 import org.springframework.samples.petclinic.model.Person;
 
 /**
@@ -41,13 +32,15 @@ import org.springframework.samples.petclinic.model.Person;
  * @author Sam Brannen
  * @author Arjen Poutsma
  */
-@Entity
-@Table(name = "vets")
+@Tuple("vets")
 public class Vet extends Person {
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "vet_specialties", joinColumns = @JoinColumn(name = "vet_id"),
-			inverseJoinColumns = @JoinColumn(name = "specialty_id"))
+	/*
+	 * Implicit join happens on tarantool router and is then passed using the
+	 * VetRepository. Space vets does not store specialties data, specialties are joined
+	 * via vet_specialties space.
+	 */
+	@Field(name = "specialties")
 	private Set<Specialty> specialties;
 
 	protected Set<Specialty> getSpecialtiesInternal() {

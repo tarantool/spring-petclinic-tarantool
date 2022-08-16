@@ -15,8 +15,7 @@
  */
 package org.springframework.samples.petclinic.model;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import org.springframework.data.tarantool.core.mapping.Field;
 import javax.validation.constraints.NotEmpty;
 
 /**
@@ -24,14 +23,13 @@ import javax.validation.constraints.NotEmpty;
  *
  * @author Ken Krebs
  */
-@MappedSuperclass
 public class Person extends BaseEntity {
 
-	@Column(name = "first_name")
+	@Field(name = "first_name")
 	@NotEmpty
 	private String firstName;
 
-	@Column(name = "last_name")
+	@Field(name = "last_name")
 	@NotEmpty
 	private String lastName;
 

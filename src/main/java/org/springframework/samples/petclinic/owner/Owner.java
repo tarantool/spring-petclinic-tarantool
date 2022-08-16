@@ -21,17 +21,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.core.style.ToStringCreator;
+import org.springframework.data.tarantool.core.mapping.Field;
+import org.springframework.data.tarantool.core.mapping.Tuple;
 import org.springframework.samples.petclinic.model.Person;
 
 /**
@@ -42,24 +39,28 @@ import org.springframework.samples.petclinic.model.Person;
  * @author Sam Brannen
  * @author Michael Isvy
  */
-@Entity
-@Table(name = "owners")
+@Tuple("owners")
 public class Owner extends Person {
 
-	@Column(name = "address")
+	@Field(name = "address")
 	@NotEmpty
 	private String address;
 
-	@Column(name = "city")
+	@Field(name = "city")
 	@NotEmpty
 	private String city;
 
-	@Column(name = "telephone")
+	@Field(name = "telephone")
 	@NotEmpty
 	@Digits(fraction = 0, integer = 10)
 	private String telephone;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+	/*
+	 * Implicit join happens on tarantool router and is then passed using the
+	 * OwnerRepository. Space owners does not store pets data, pets are joined using the
+	 * owner_id they know.
+	 */
+	@Field(name = "pets")
 	private Set<Pet> pets;
 
 	public String getAddress() {
@@ -107,7 +108,7 @@ public class Owner extends Person {
 		if (pet.isNew()) {
 			getPetsInternal().add(pet);
 		}
-		pet.setOwner(this);
+		pet.setOwner(this.getId());
 	}
 
 	/**

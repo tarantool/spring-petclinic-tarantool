@@ -41,7 +41,7 @@ class VetController {
 		// Here we are returning an object of type 'Vets' rather than a collection of Vet
 		// objects so it is simpler for Object-Xml mapping
 		Vets vets = new Vets();
-		vets.getVetList().addAll(this.vets.findAll());
+		vets.getVetList().addAll(this.vets.getVetsWithSpecialties());
 		model.put("vets", vets);
 		return "vets/vetList";
 	}
@@ -51,7 +51,7 @@ class VetController {
 		// Here we are returning an object of type 'Vets' rather than a collection of Vet
 		// objects so it is simpler for JSon/Object mapping
 		Vets vets = new Vets();
-		vets.getVetList().addAll(this.vets.findAll());
+		vets.getVetList().addAll(this.vets.getVetsWithSpecialties());
 		return vets;
 	}
 

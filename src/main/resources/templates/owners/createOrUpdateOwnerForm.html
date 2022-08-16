@@ -16,6 +16,7 @@
         th:replace="~{fragments/inputField :: input ('City', 'city', 'text')}" />
       <input
         th:replace="~{fragments/inputField :: input ('Telephone', 'telephone', 'text')}" />
+      <input th:field="*{bucketId}" type="hidden">
     </div>
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
