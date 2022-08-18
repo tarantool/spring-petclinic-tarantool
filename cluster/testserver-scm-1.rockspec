@@ -13,8 +13,8 @@ dependencies = {
     'cartridge-cli-extensions == 1.1.1-1',
     'crud == 0.12.1-1',
     'migrations == 0.4.2-1',
-
 }
+
 build = {
 	type = 'none';
 }
