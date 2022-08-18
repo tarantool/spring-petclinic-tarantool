@@ -16,7 +16,7 @@ end
 
 
 local function init(opts) -- luacheck: no unused args
-    -- some clutches for springdata
+    -- some clutches for Spring Data
     rawset(_G, 'ddl', { get_schema = get_schema })
     rawset(_G, 'get_vets_with_specialties', vets.get_vets_with_specialties)
     rawset(_G, 'find_owners_by_last_name', owners.find_owners_by_last_name)

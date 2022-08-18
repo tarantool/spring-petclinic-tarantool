@@ -1,7 +1,9 @@
 local crud = require("crud")
 
-local function find_visits_by_pet_id(pet_id)
-    return crud.select("visits", {{"=", "pet_id", pet_id}}, { batch_size = 1000, prefer_replica = true })
+local function find_visits_by_pet_id(pet_id, batch_size, after)
+    batch_size = batch_size or 1000
+    -- Example of pagination implementation
+    return crud.select("visits", {{"=", "pet_id", pet_id}}, { first = batch_size, after=after })
 end
 
 return {

@@ -6,7 +6,7 @@ local PET_TYPE_FIELD_NUMBER = 4
 --- OneToOne = Pet -> PetType
 local function find_pet_by_id(id)
     local pet, pet_type, err
-    pet, err = crud.select("pets", { { "=", 'id', id } }, { batch_size = 1000, prefer_replica = true })
+    pet, err = crud.get("pets", id)
     if err ~= nil then
         return nil, err
     end
@@ -17,7 +17,7 @@ local function find_pet_by_id(id)
     end
 
     pet_type = crud.unflatten_rows(pet_type.rows, pet_type.metadata)[1]
-    pet.rows[1] = pet.rows[1]:transform(PET_TYPE_FIELD_NUMBER, 1, pet_type)
+    pet.rows[1][PET_TYPE_FIELD_NUMBER] = pet_type
 
     return pet
 end
