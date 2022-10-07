@@ -7,7 +7,7 @@ local SPECIALTIES_FIELD_NUMBER = 5
 --- Get all storages URIs for map reduce
 local function get_uriList()
     local uriLeader, err = cartridge_rpc.get_candidates('app.roles.api_storage',
-        { leader_only=true })
+        { leader_only = true })
     if err ~= nil then
         return nil, err
     end
@@ -43,8 +43,7 @@ local function get_vets_with_specialties()
     local vets_by_storage, specialties, specialty, err
     local vets_list = {}
 
-    vets_by_storage, err =
-        cartridge_pool.map_call('get_vets_with_specialties_id', {}, { uri_list = get_uriList() })
+    vets_by_storage, err = cartridge_pool.map_call('get_vets_with_specialties_id', {}, { uri_list = get_uriList() })
     if err then
         return nil, err
     end

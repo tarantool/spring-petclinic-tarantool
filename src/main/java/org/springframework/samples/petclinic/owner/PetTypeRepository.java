@@ -24,8 +24,6 @@ import java.util.UUID;
  * with Spring Data naming conventions so this interface can easily be extended for Spring
  * Data. See:
  * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.query-methods.query-creation
- *
  */
 public interface PetTypeRepository extends TarantoolRepository<PetType, UUID> {
-
 }

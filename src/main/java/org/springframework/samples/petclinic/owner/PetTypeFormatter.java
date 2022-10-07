@@ -36,30 +36,30 @@ import org.springframework.stereotype.Component;
 @Component
 public class PetTypeFormatter implements Formatter<PetType> {
 
-	private final PetRepository pets;
+    private final PetRepository pets;
 
-	private final PetTypeRepository petsTypes;
+    private final PetTypeRepository petsTypes;
 
-	@Autowired
-	public PetTypeFormatter(PetRepository pets, PetTypeRepository petsTypes) {
-		this.pets = pets;
-		this.petsTypes = petsTypes;
-	}
+    @Autowired
+    public PetTypeFormatter(PetRepository pets, PetTypeRepository petsTypes) {
+        this.pets = pets;
+        this.petsTypes = petsTypes;
+    }
 
-	@Override
-	public String print(PetType petType, Locale locale) {
-		return petType.getName();
-	}
+    @Override
+    public String print(PetType petType, Locale locale) {
+        return petType.getName();
+    }
 
-	@Override
-	public PetType parse(String text, Locale locale) throws ParseException {
-		Collection<PetType> findPetTypes = (Collection<PetType>) this.petsTypes.findAll();
-		for (PetType type : findPetTypes) {
-			if (type.getName().equals(text)) {
-				return type;
-			}
-		}
-		throw new ParseException("type not found: " + text, 0);
-	}
+    @Override
+    public PetType parse(String text, Locale locale) throws ParseException {
+        Collection<PetType> findPetTypes = (Collection<PetType>) this.petsTypes.findAll();
+        for (PetType type : findPetTypes) {
+            if (type.getName().equals(text)) {
+                return type;
+            }
+        }
+        throw new ParseException("type not found: " + text, 0);
+    }
 
 }

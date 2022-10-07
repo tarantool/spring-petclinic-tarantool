@@ -16,6 +16,7 @@
 package org.springframework.samples.petclinic.vet;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import org.springframework.data.tarantool.core.mapping.Tuple;
 import org.springframework.samples.petclinic.model.NamedEntity;
@@ -29,4 +30,11 @@ import org.springframework.samples.petclinic.model.NamedEntity;
 @Tuple("specialties")
 public class Specialty extends NamedEntity implements Serializable {
 
+    public Specialty() {
+    }
+
+    public Specialty(UUID id, String name) {
+        this.setId(id);
+        this.setName(name);
+    }
 }

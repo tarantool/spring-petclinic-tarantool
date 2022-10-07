@@ -33,20 +33,22 @@ import java.util.UUID;
  */
 public interface PetRepository extends TarantoolRepository<Pet, UUID> {
 
-	/**
-	 * Retrieve a {@link Pet} from the data store by id and owner id. We need ownerId
-	 * because we should know which bucket our pet is in.
-	 * @param id the id to search for
-	 * @return the {@link Pet} if found
-	 */
-	@Query(function = "find_pet_by_id")
-	Pet findPetById(UUID id);
+    /**
+     * Retrieve a {@link Pet} from the data store by id and owner id. We need ownerId
+     * because we should know which bucket our pet is in.
+     *
+     * @param id the id to search for
+     * @return the {@link Pet} if found
+     */
+    @Query(function = "find_pet_by_id")
+    Pet findPetById(UUID id);
 
-	/**
-	 * Save a {@link Pet} to the data store, either inserting or updating it.
-	 * @param pet the {@link Pet} to save
-	 */
-	@Query(function = "save_pet")
-	Pet save(Pet pet);
+    /**
+     * Save a {@link Pet} to the data store, either inserting or updating it.
+     *
+     * @param pet the {@link Pet} to save
+     */
+    @Query(function = "save_pet")
+    Pet save(Pet pet);
 
 }

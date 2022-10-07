@@ -33,7 +33,7 @@ local function find_owners_by_last_name(last_name)
         for _, pet in pairs(pets) do
             -- this is necessary for correct processing of the nested entity pet_type
             -- for this Query we don't need pet_type name
-            pet.type_id = { id=pet.type_id }
+            pet.type_id = { id = pet.type_id }
         end
         owners.rows[i] = owner:transform(PET_FIELD_NUMBER, 1, pets)
     end

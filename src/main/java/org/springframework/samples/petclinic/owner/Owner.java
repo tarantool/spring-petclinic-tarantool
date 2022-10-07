@@ -15,11 +15,12 @@
  */
 package org.springframework.samples.petclinic.owner;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
@@ -42,110 +43,124 @@ import org.springframework.samples.petclinic.model.Person;
 @Tuple("owners")
 public class Owner extends Person {
 
-	@Field(name = "address")
-	@NotEmpty
-	private String address;
+    @Field(name = "address")
+    @NotEmpty
+    private String address;
 
-	@Field(name = "city")
-	@NotEmpty
-	private String city;
+    @Field(name = "city")
+    @NotEmpty
+    private String city;
 
-	@Field(name = "telephone")
-	@NotEmpty
-	@Digits(fraction = 0, integer = 10)
-	private String telephone;
+    @Field(name = "telephone")
+    @NotEmpty
+    @Digits(fraction = 0, integer = 10)
+    private String telephone;
 
-	/*
-	 * Implicit join happens on tarantool router and is then passed using the
-	 * OwnerRepository. Space owners does not store pets data, pets are joined using the
-	 * owner_id they know.
-	 */
-	@Field(name = "pets")
-	private Set<Pet> pets;
+    /*
+     * Implicit join happens on tarantool router and is then passed using the
+     * OwnerRepository. Space owners does not store pets data, pets are joined using the
+     * owner_id they know.
+     */
+    @Field(name = "pets")
+    private Set<Pet> pets;
 
-	public String getAddress() {
-		return this.address;
-	}
+    public Owner() {
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public Owner(UUID id, String firstName, String lastName, String address, String city, String telephone) {
+        this.setId(id);
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
+        this.address = address;
+        this.city = city;
+        this.telephone = telephone;
+    }
 
-	public String getCity() {
-		return this.city;
-	}
+    public String getAddress() {
+        return this.address;
+    }
 
-	public void setCity(String city) {
-		this.city = city;
-	}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	public String getTelephone() {
-		return this.telephone;
-	}
+    public String getCity() {
+        return this.city;
+    }
 
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
-	}
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-	protected Set<Pet> getPetsInternal() {
-		if (this.pets == null) {
-			this.pets = new HashSet<>();
-		}
-		return this.pets;
-	}
+    public String getTelephone() {
+        return this.telephone;
+    }
 
-	protected void setPetsInternal(Set<Pet> pets) {
-		this.pets = pets;
-	}
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
 
-	public List<Pet> getPets() {
-		List<Pet> sortedPets = new ArrayList<>(getPetsInternal());
-		PropertyComparator.sort(sortedPets, new MutableSortDefinition("name", true, true));
-		return Collections.unmodifiableList(sortedPets);
-	}
+    protected Set<Pet> getPetsInternal() {
+        if (this.pets == null) {
+            this.pets = new HashSet<>();
+        }
+        return this.pets;
+    }
 
-	public void addPet(Pet pet) {
-		if (pet.isNew()) {
-			getPetsInternal().add(pet);
-		}
-		pet.setOwner(this.getId());
-	}
+    protected void setPetsInternal(Set<Pet> pets) {
+        this.pets = pets;
+    }
 
-	/**
-	 * Return the Pet with the given name, or null if none found for this Owner.
-	 * @param name to test
-	 * @return true if pet name is already in use
-	 */
-	public Pet getPet(String name) {
-		return getPet(name, false);
-	}
+    public List<Pet> getPets() {
+        List<Pet> sortedPets = new ArrayList<>(getPetsInternal());
+        PropertyComparator.sort(sortedPets, new MutableSortDefinition("name", true, true));
+        return Collections.unmodifiableList(sortedPets);
+    }
 
-	/**
-	 * Return the Pet with the given name, or null if none found for this Owner.
-	 * @param name to test
-	 * @return true if pet name is already in use
-	 */
-	public Pet getPet(String name, boolean ignoreNew) {
-		name = name.toLowerCase();
-		for (Pet pet : getPetsInternal()) {
-			if (!ignoreNew || !pet.isNew()) {
-				String compName = pet.getName();
-				compName = compName.toLowerCase();
-				if (compName.equals(name)) {
-					return pet;
-				}
-			}
-		}
-		return null;
-	}
+    public void addPet(Pet pet) {
+        if (pet.isNew()) {
+            getPetsInternal().add(pet);
+        }
+        pet.setOwner(this.getId());
+    }
 
-	@Override
-	public String toString() {
-		return new ToStringCreator(this)
+    /**
+     * Return the Pet with the given name, or null if none found for this Owner.
+     *
+     * @param name to test
+     * @return true if pet name is already in use
+     */
+    public Pet getPet(String name) {
+        return getPet(name, false);
+    }
 
-				.append("id", this.getId()).append("new", this.isNew()).append("lastName", this.getLastName())
-				.append("firstName", this.getFirstName()).append("address", this.address).append("city", this.city)
-				.append("telephone", this.telephone).toString();
-	}
+    /**
+     * Return the Pet with the given name, or null if none found for this Owner.
+     *
+     * @param name to test
+     * @return true if pet name is already in use
+     */
+    public Pet getPet(String name, boolean ignoreNew) {
+        name = name.toLowerCase();
+        for (Pet pet : getPetsInternal()) {
+            if (!ignoreNew || !pet.isNew()) {
+                String compName = pet.getName();
+                compName = compName.toLowerCase();
+                if (compName.equals(name)) {
+                    return pet;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringCreator(this)
+
+            .append("id", this.getId()).append("new", this.isNew()).append("lastName", this.getLastName())
+            .append("firstName", this.getFirstName()).append("address", this.address).append("city", this.city)
+            .append("telephone", this.telephone).toString();
+    }
 
 }

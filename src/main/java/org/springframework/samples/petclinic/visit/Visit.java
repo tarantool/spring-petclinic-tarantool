@@ -34,46 +34,60 @@ import org.springframework.samples.petclinic.model.BaseEntity;
 @Tuple("visits")
 public class Visit extends BaseEntity {
 
-	@Field(name = "visit_date")
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate date;
+    @Field(name = "visit_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
 
-	@NotEmpty
-	@Field(name = "description")
-	private String description;
+    @NotEmpty
+    @Field(name = "description")
+    private String description;
 
-	@Field(name = "pet_id")
-	private UUID petId;
+    @Field(name = "pet_id")
+    private UUID petId;
 
-	/**
-	 * Creates a new instance of Visit for the current date
-	 */
-	public Visit() {
-		this.date = LocalDate.now();
-	}
+    /**
+     * Creates a new instance of Visit for the current date
+     */
+    public Visit() {
+        this.setDate(LocalDate.now());
+    }
 
-	public LocalDate getDate() {
-		return this.date;
-	}
+    public Visit(UUID id, UUID petId, String description) {
+        this.setId(id);
+        this.petId = petId;
+        this.date = LocalDate.now();
+        this.description = description;
+    }
 
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
+    public Visit(UUID id, UUID petId, LocalDate date, String description) {
+        this.setId(id);
+        this.petId = petId;
+        this.date = date;
+        this.description = description;
+    }
 
-	public String getDescription() {
-		return this.description;
-	}
+    public LocalDate getDate() {
+        return this.date;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
 
-	public UUID getPetId() {
-		return this.petId;
-	}
+    public String getDescription() {
+        return this.description;
+    }
 
-	public void setPetId(UUID petId) {
-		this.petId = petId;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public UUID getPetId() {
+        return this.petId;
+    }
+
+    public void setPetId(UUID petId) {
+        this.petId = petId;
+    }
 
 }

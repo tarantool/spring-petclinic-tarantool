@@ -30,6 +30,7 @@
     <jacoco.version>0.8.8</jacoco.version>
     <nohttp-checkstyle.version>0.0.10</nohttp-checkstyle.version>
     <spring-format.version>0.0.25</spring-format.version>
+    <testcontainers.version>1.16.2</testcontainers.version>
   </properties>
 
   <dependencies>
@@ -120,6 +121,24 @@
       <groupId>io.tarantool</groupId>
       <artifactId>spring-data-tarantool</artifactId>
       <version>0.5.1</version>
+    </dependency>
+    <dependency>
+      <groupId>io.tarantool</groupId>
+      <artifactId>testcontainers-java-tarantool</artifactId>
+      <version>0.5.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.7.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${testcontainers.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

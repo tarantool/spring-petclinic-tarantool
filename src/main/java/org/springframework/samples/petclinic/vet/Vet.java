@@ -35,38 +35,47 @@ import org.springframework.samples.petclinic.model.Person;
 @Tuple("vets")
 public class Vet extends Person {
 
-	/*
-	 * Implicit join happens on tarantool router and is then passed using the
-	 * VetRepository. Space vets does not store specialties data, specialties are joined
-	 * via vet_specialties space.
-	 */
-	@Field(name = "specialties")
-	private Set<Specialty> specialties;
+    public Vet() {
+    }
 
-	protected Set<Specialty> getSpecialtiesInternal() {
-		if (this.specialties == null) {
-			this.specialties = new HashSet<>();
-		}
-		return this.specialties;
-	}
+    public Vet(UUID id, String firstName, String lastName) {
+        this.setId(id);
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
+    }
 
-	protected void setSpecialtiesInternal(Set<Specialty> specialties) {
-		this.specialties = specialties;
-	}
+    /*
+     * Implicit join happens on tarantool router and is then passed using the
+     * VetRepository. Space vets does not store specialties data, specialties are joined
+     * via vet_specialties space.
+     */
+    @Field(name = "specialties")
+    private Set<Specialty> specialties;
 
-	@XmlElement
-	public List<Specialty> getSpecialties() {
-		List<Specialty> sortedSpecs = new ArrayList<>(getSpecialtiesInternal());
-		PropertyComparator.sort(sortedSpecs, new MutableSortDefinition("name", true, true));
-		return Collections.unmodifiableList(sortedSpecs);
-	}
+    protected Set<Specialty> getSpecialtiesInternal() {
+        if (this.specialties == null) {
+            this.specialties = new HashSet<>();
+        }
+        return this.specialties;
+    }
 
-	public int getNrOfSpecialties() {
-		return getSpecialtiesInternal().size();
-	}
+    protected void setSpecialtiesInternal(Set<Specialty> specialties) {
+        this.specialties = specialties;
+    }
 
-	public void addSpecialty(Specialty specialty) {
-		getSpecialtiesInternal().add(specialty);
-	}
+    @XmlElement
+    public List<Specialty> getSpecialties() {
+        List<Specialty> sortedSpecs = new ArrayList<>(getSpecialtiesInternal());
+        PropertyComparator.sort(sortedSpecs, new MutableSortDefinition("name", true, true));
+        return Collections.unmodifiableList(sortedSpecs);
+    }
+
+    public int getNrOfSpecialties() {
+        return getSpecialtiesInternal().size();
+    }
+
+    public void addSpecialty(Specialty specialty) {
+        getSpecialtiesInternal().add(specialty);
+    }
 
 }

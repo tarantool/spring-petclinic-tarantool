@@ -30,30 +30,30 @@ import java.util.UUID;
  */
 public class BaseEntity implements Serializable {
 
-	@Id
-	private UUID id;
+    @Id
+    private UUID id;
 
-	public UUID getId() {
-		return id;
-	}
+    public UUID getId() {
+        return id;
+    }
 
-	public void setId(UUID id) {
-		this.id = id;
-	}
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
-	@Field(name = "bucket_id")
-	private Integer bucketId;
+    @Field(name = "bucket_id")
+    private Integer bucketId;
 
-	public Integer getBucketId() {
-		return bucketId;
-	}
+    public Integer getBucketId() {
+        return bucketId;
+    }
 
-	public void setBucketId(Integer bucketId) {
-		this.bucketId = bucketId;
-	}
+    public void setBucketId(Integer bucketId) {
+        this.bucketId = bucketId;
+    }
 
-	public boolean isNew() {
-		return this.id == null;
-	}
+    public boolean isNew() {
+        return this.id == null;
+    }
 
 }

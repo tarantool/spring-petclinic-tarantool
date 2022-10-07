@@ -14,7 +14,6 @@ local function get_schema()
     end
 end
 
-
 local function init(opts) -- luacheck: no unused args
     -- some clutches for Spring Data
     rawset(_G, 'ddl', { get_schema = get_schema })
@@ -25,18 +24,19 @@ local function init(opts) -- luacheck: no unused args
     rawset(_G, 'find_visits_by_pet_id', visits.find_visits_by_pet_id)
     rawset(_G, 'save_pet', pets.save_pet)
 
-
     return true
 end
 
 local function stop()
 end
 
-local function validate_config(conf_new, conf_old) -- luacheck: no unused args
+local function validate_config(conf_new, conf_old)
+    -- luacheck: no unused args
     return true
 end
 
-local function apply_config(conf, opts) -- luacheck: no unused args
+local function apply_config(conf, opts)
+    -- luacheck: no unused args
     return true
 end
 

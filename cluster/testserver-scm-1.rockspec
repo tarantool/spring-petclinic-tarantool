@@ -5,10 +5,10 @@ source  = {
 }
 -- Put any modules your app depends on here
 dependencies = {
-    'tarantool >= 2.10.0',
+    'tarantool >= 2.8',
     'lua >= 5.1',
     'checks == 3.1.0-1',
-    'cartridge == 2.7.5-1',
+    'cartridge == 2.7.3-1',
     'metrics == 0.14.0-1',
     'cartridge-cli-extensions == 1.1.1-1',
     'crud == 0.12.1-1',
@@ -16,5 +16,5 @@ dependencies = {
 }
 
 build = {
-	type = 'none';
+    type = 'none';
 }
