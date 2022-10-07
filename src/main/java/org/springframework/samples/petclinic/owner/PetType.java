@@ -18,10 +18,20 @@ package org.springframework.samples.petclinic.owner;
 import org.springframework.data.tarantool.core.mapping.Tuple;
 import org.springframework.samples.petclinic.model.NamedEntity;
 
+import java.util.UUID;
+
 /**
  * @author Juergen Hoeller Can be Cat, Dog, Hamster...
  */
 @Tuple("types")
 public class PetType extends NamedEntity {
+
+    public PetType() {
+    }
+
+    public PetType(UUID id, String name) {
+        this.setId(id);
+        this.setName(name);
+    }
 
 }

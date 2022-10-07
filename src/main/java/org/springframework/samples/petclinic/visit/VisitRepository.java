@@ -36,15 +36,16 @@ import org.springframework.samples.petclinic.model.BaseEntity;
  */
 public interface VisitRepository extends TarantoolRepository<Visit, UUID> {
 
-	/**
-	 * Save a <code>Visit</code> to the data store, either inserting or updating it.
-	 * @param visit the <code>Visit</code> to save
-	 * @see BaseEntity#isNew
-	 */
-	Visit save(Visit visit) throws DataAccessException;
+    /**
+     * Save a <code>Visit</code> to the data store, either inserting or updating it.
+     *
+     * @param visit the <code>Visit</code> to save
+     * @see BaseEntity#isNew
+     */
+    Visit save(Visit visit) throws DataAccessException;
 
-	// we can't use default findByPetId without annotation yet
-	@Query(function = "find_visits_by_pet_id")
-	List<Visit> findByPetId(UUID petId);
+    // we can't use default findByPetId without annotation yet
+    @Query(function = "find_visits_by_pet_id")
+    List<Visit> findByPetId(UUID petId);
 
 }

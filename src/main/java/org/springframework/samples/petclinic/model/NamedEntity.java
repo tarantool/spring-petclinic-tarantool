@@ -26,20 +26,20 @@ import org.springframework.data.tarantool.core.mapping.Field;
  */
 public class NamedEntity extends BaseEntity {
 
-	@Field(name = "name")
-	private String name;
+    @Field(name = "name")
+    private String name;
 
-	public String getName() {
-		return this.name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@Override
-	public String toString() {
-		return this.getName();
-	}
+    @Override
+    public String toString() {
+        return this.getName();
+    }
 
 }

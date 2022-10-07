@@ -39,12 +39,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface VetRepository extends TarantoolRepository<Vet, UUID> {
 
-	/**
-	 * Retrieve all <code>Vet</code>s from the data store.
-	 * @return a <code>Collection</code> of <code>Vet</code>s
-	 */
-	@Cacheable("vets")
-	@Query(function = "get_vets_with_specialties")
-	Collection<Vet> getVetsWithSpecialties() throws DataAccessException;
+    /**
+     * Retrieve all <code>Vet</code>s from the data store.
+     *
+     * @return a <code>Collection</code> of <code>Vet</code>s
+     */
+    @Cacheable("vets")
+    @Query(function = "get_vets_with_specialties")
+    Collection<Vet> getVetsWithSpecialties() throws DataAccessException;
 
 }

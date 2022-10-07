@@ -16,7 +16,14 @@
 package org.springframework.samples.petclinic.owner;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
@@ -36,67 +43,83 @@ import org.springframework.samples.petclinic.visit.Visit;
 @Tuple("pets")
 public class Pet extends NamedEntity {
 
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@Field(name = "birth_date")
-	private LocalDate birthDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Field(name = "birth_date")
+    private LocalDate birthDate;
 
-	/*
-	 * Implicit join happens on tarantool router and is then passed using the PetRepo.
-	 * Space only store type_id, not a full tuple of PetType. When we return data we
-	 * replace it.
-	 */
-	@Field(name = "type_id")
-	private PetType type;
+    /*
+     * Implicit join happens on tarantool router and is then passed using the PetRepo.
+     * Space only store type_id, not a full tuple of PetType. When we return data we
+     * replace it.
+     */
+    @Field(name = "type_id")
+    private PetType type;
 
-	@Field(name = "owner_id")
-	private UUID owner;
+    @Field(name = "owner_id")
+    private UUID owner;
 
-	private Set<Visit> visits = new LinkedHashSet<>();
+    private Set<Visit> visits = new LinkedHashSet<>();
 
-	public void setBirthDate(LocalDate birthDate) {
-		this.birthDate = birthDate;
-	}
+    public Pet() {
+    }
 
-	public LocalDate getBirthDate() {
-		return this.birthDate;
-	}
+    public Pet(UUID id, String name, LocalDate birthDate) {
+        this.setId(id);
+        this.setName(name);
+        this.birthDate = birthDate;
+    }
 
-	public PetType getType() {
-		return this.type;
-	}
+    public Pet(UUID id, String name, LocalDate birthDate, PetType type) {
+        this.setId(id);
+        this.setName(name);
+        this.birthDate = birthDate;
+        this.type = type;
+    }
 
-	public void setType(PetType type) {
-		this.type = type;
-	}
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
 
-	public UUID getOwner() {
-		return this.owner;
-	}
+    public LocalDate getBirthDate() {
+        return this.birthDate;
+    }
 
-	protected void setOwner(UUID owner) {
-		this.owner = owner;
-	}
+    public PetType getType() {
+        return this.type;
+    }
 
-	protected Set<Visit> getVisitsInternal() {
-		if (this.visits == null) {
-			this.visits = new HashSet<>();
-		}
-		return this.visits;
-	}
+    public void setType(PetType type) {
+        this.type = type;
+    }
 
-	protected void setVisitsInternal(Collection<Visit> visits) {
-		this.visits = new LinkedHashSet<>(visits);
-	}
+    public UUID getOwner() {
+        return this.owner;
+    }
 
-	public List<Visit> getVisits() {
-		List<Visit> sortedVisits = new ArrayList<>(getVisitsInternal());
-		PropertyComparator.sort(sortedVisits, new MutableSortDefinition("date", false, false));
-		return Collections.unmodifiableList(sortedVisits);
-	}
+    protected void setOwner(UUID owner) {
+        this.owner = owner;
+    }
 
-	public void addVisit(Visit visit) {
-		getVisitsInternal().add(visit);
-		visit.setPetId(this.getId());
-	}
+    protected Set<Visit> getVisitsInternal() {
+        if (this.visits == null) {
+            this.visits = new HashSet<>();
+        }
+        return this.visits;
+    }
+
+    protected void setVisitsInternal(Collection<Visit> visits) {
+        this.visits = new LinkedHashSet<>(visits);
+    }
+
+    public List<Visit> getVisits() {
+        List<Visit> sortedVisits = new ArrayList<>(getVisitsInternal());
+        PropertyComparator.sort(sortedVisits, new MutableSortDefinition("date", false, false));
+        return Collections.unmodifiableList(sortedVisits);
+    }
+
+    public void addVisit(Visit visit) {
+        getVisitsInternal().add(visit);
+        visit.setPetId(this.getId());
+    }
 
 }

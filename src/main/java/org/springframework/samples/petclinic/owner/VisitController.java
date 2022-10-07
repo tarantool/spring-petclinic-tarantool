@@ -41,61 +41,61 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 class VisitController {
 
-	private final VisitRepository visits;
+    private final VisitRepository visits;
 
-	private final PetRepository pets;
+    private final PetRepository pets;
 
-	private final OwnerRepository owners;
+    private final OwnerRepository owners;
 
-	public VisitController(VisitRepository visits, PetRepository pets, OwnerRepository owners) {
-		this.visits = visits;
-		this.pets = pets;
-		this.owners = owners;
-	}
+    public VisitController(VisitRepository visits, PetRepository pets, OwnerRepository owners) {
+        this.visits = visits;
+        this.pets = pets;
+        this.owners = owners;
+    }
 
-	@InitBinder
-	public void setAllowedFields(WebDataBinder dataBinder) {
-		dataBinder.setDisallowedFields("id");
-	}
+    @InitBinder
+    public void setAllowedFields(WebDataBinder dataBinder) {
+        dataBinder.setDisallowedFields("id");
+    }
 
-	/**
-	 * Called before each and every @RequestMapping annotated method. 2 goals: - Make sure
-	 * we always have fresh data - Since we do not use the session scope, make sure that
-	 * Pet object always has an id (Even though id is not part of the form fields)
-	 * @param {UUID} petId primary key of pets space
-	 * @return Pet
-	 */
-	@ModelAttribute("visit")
-	public Visit loadPetWithVisit(@PathVariable("petId") UUID petId, @PathVariable("ownerId") UUID ownerId,
-			Map<String, Object> model) {
-		Pet pet = this.pets.findPetById(petId);
-		pet.setVisitsInternal(this.visits.findByPetId(petId));
-		model.put("pet", pet);
-		Visit visit = new Visit();
-		pet.addVisit(visit);
+    /**
+     * Called before each and every @RequestMapping annotated method. 2 goals: - Make sure
+     * we always have fresh data - Since we do not use the session scope, make sure that
+     * Pet object always has an id (Even though id is not part of the form fields)
+     *
+     * @param {UUID} petId primary key of pets space
+     * @return Pet
+     */
+    @ModelAttribute("visit")
+    public Visit loadPetWithVisit(@PathVariable("petId") UUID petId, @PathVariable("ownerId") UUID ownerId,
+                                  Map<String, Object> model) {
+        Pet pet = this.pets.findPetById(petId);
+        pet.setVisitsInternal(this.visits.findByPetId(petId));
+        model.put("pet", pet);
+        Visit visit = new Visit();
+        pet.addVisit(visit);
 
-		Owner owner = this.owners.findOwnerById(ownerId);
-		model.put("owner", owner);
-		return visit;
-	}
+        Owner owner = this.owners.findOwnerById(ownerId);
+        model.put("owner", owner);
+        return visit;
+    }
 
-	// Spring MVC calls method loadPetWithVisit(...) before initNewVisitForm is called
-	@GetMapping("/owners/{ownerId}/pets/{petId}/visits/new")
-	public String initNewVisitForm(@PathVariable("petId") UUID petId, Map<String, Object> model) {
-		return "pets/createOrUpdateVisitForm";
-	}
+    // Spring MVC calls method loadPetWithVisit(...) before initNewVisitForm is called
+    @GetMapping("/owners/{ownerId}/pets/{petId}/visits/new")
+    public String initNewVisitForm(@PathVariable("petId") UUID petId, Map<String, Object> model) {
+        return "pets/createOrUpdateVisitForm";
+    }
 
-	// Spring MVC calls method loadPetWithVisit(...) before processNewVisitForm is called
-	@PostMapping("/owners/{ownerId}/pets/{petId}/visits/new")
-	public String processNewVisitForm(@Valid Visit visit, BindingResult result) {
-		if (result.hasErrors()) {
-			return "pets/createOrUpdateVisitForm";
-		}
-		else {
-			visit.setId(UUID.randomUUID());
-			this.visits.save(visit);
-			return "redirect:/owners/{ownerId}";
-		}
-	}
+    // Spring MVC calls method loadPetWithVisit(...) before processNewVisitForm is called
+    @PostMapping("/owners/{ownerId}/pets/{petId}/visits/new")
+    public String processNewVisitForm(@Valid Visit visit, BindingResult result) {
+        if (result.hasErrors()) {
+            return "pets/createOrUpdateVisitForm";
+        } else {
+            visit.setId(UUID.randomUUID());
+            this.visits.save(visit);
+            return "redirect:/owners/{ownerId}";
+        }
+    }
 
 }
