@@ -6,7 +6,7 @@
 ## Running petclinic locally
 First you need to [install](https://www.tarantool.io/en/download/os-installation/) tarantool on the system. Well, then you need to start the tarantool cluster:
 ```
-git clone git@github.com:ArtDu/spring-petclinic-tarantool.git
+git clone git@github.com:tarantool/spring-petclinic-tarantool.git
 cd spring-petclinic-tarantool/cluster
 cartridge build                                                                         # Install modules
 cartridge start -d                                                                      # Start cluster in deamonize mode
